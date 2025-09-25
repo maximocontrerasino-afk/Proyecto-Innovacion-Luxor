@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discover Luxor archeology</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family:'Gill Sans', 'Gill Sans MT', 'Calibri', 'Trebuchet MS', sans-serif;
+            color: #3f2e10;
+            padding: 2.5rem;
+            background-color: transparent; 
+            background-image: url('695840_e6d7207c20854ca5934dffaf0403cec3~mv2.avif');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; 
+            min-height: 100vh;
+            margin: 0; 
+            position: relative;
+        }
+        .background-overlay-container {
+            position:fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; 
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .background-image-cover {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .gif-overlay-center {
+            max-width: 30rem;
+            max-height: 30rem;
+            object-fit: contain; 
+            position: absolute; 
+            z-index: 0;
+        }
+        .container, .info-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            background-color: #dea731e4;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 3rem;
+            position: relative; 
+            z-index: 1; 
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #3f2e10;
+            letter-spacing: -0.05em;
+        }
+        .header p {
+            font-size: 1.25rem;
+            color: #3f2e10;
+            margin-top: 0.5rem;
+        }
+        .info-container {
+            padding: 2rem 3rem;
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        .info-content {
+            flex: 2;
+        }
+        .info-container h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #3f2e10;
+            margin-bottom: 1rem;
+        }
+        .info-container p {
+            font-size: 1.15rem;
+            line-height: 1.6;
+            color: #3f2e10;
+            text-align: justify;
+        }
+        .info-image {
+            flex: 1;
+            max-width: 350px;
+            border-radius: 5rem;
+            border-color: #513e1c;
+            object-fit: cover;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .map-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            background-color: #dea731e4;
+            overflow: hidden;
+        }
+        .map-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 5rem;
+            border-color: #513e1c;
+        }
+        .map-pin {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            border: 3px solid #000000;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        .map-pin:hover {
+            transform: scale(1.3) translate(-50%, -50%);
+            z-index: 10;
+        }
+        .pin-mesopotamia { background-color: #991e1e; }
+        .pin-egipto { background-color: #ffd83b; }
+        .pin-indo { background-color: #40ba73; }
+        .pin-china { background-color: #d10000; }
+        .pin-persa { background-color: #9b59b6; }
+        .pin-mesoamerica { background-color: #834f28; }
+        .pin-islamico { background-color: #1b8902; }
+        .pin-europa { background-color: #292ec1; }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #513e1cdf;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background-color: #dea731e4;
+            padding: 2.5rem;
+            border-radius: 1rem;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            animation: fadeIn 0.3s ease-out;
+            border-radius: 2;
+            border-color: #000000;
+        }
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #513e1c;
+            transition: color 0.2s;
+        }
+        .close-btn:hover {
+            color: #000000;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .p-instruction {
+            text-align: center;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #3f2e10;
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="background-overlay-container">
+    <img src="695840_e6d7207c20854ca5934dffaf0403cec3~mv2.avif" alt="Fondo con logo FIRST LEGO League" class="background-image-cover">
+    <img src="695840_e3d26ee4600447d59c712acccb26cae6~mv2.gif" alt="GIF de marco animado" class="gif-overlay-center">
+</div>
+<div class="container">
+    <div class="header">
+        <h1 style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">Discover Luxor Archeology</h1>
+        <p style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">Bienvenido a Discover Luxor Archeology, nuestra página te ayudará a explorar características de algunas de las civilizaciones antiguas y medievales más importantes de todo el mundo, nuestro objetivo es darte una pincelada del mundo de la arqueología, Aquí encontrarás información clara, organizada y atractiva de algunas civilizaciones. Gracias por visitar nuestro sitio.</p>
+    </div>
+</div>
+
+<div class="info-container">
+    <div class="info-content">
+        <h2 style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; text-align: center;" >¿Qué es la Arqueología?</h2>
+        <p style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; text-align: center;">
+            La Arqueología es la ciencia que estudia el pasado humano a través de la recuperación, documentación y análisis de los restos materiales que dejaron las sociedades. 
+            <br>
+            Los arqueólogos excavan yacimientos (como el de la imagen) para encontrar artefactos (herramientas, cerámica), estructuras (muros, tumbas) y restos orgánicos, que son la única fuente de información directa para comprender cómo vivían, cómo interactuaban con su entorno, sus creencias y su tecnología. En esencia, la arqueología da voz a las personas del pasado a través de sus objetos.
+        </p>
+    </div>
+    <img src="2GBA6ZO4SBJ77FO3F2BNVAL76M.jpg" alt="Arqueólogos trabajando en una excavación de un sitio antiguo" class="info-image">
+</div>
+<div class="container">
+    
+    <p class="map-instruction" style=" text-align:center; font-size: 2rem; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;"><strong>Presione los puntos en el mapa para más información.</strong></p>
+    
+    <div class="map-container">
+        <img class="map-image" src="8066a85142834f9ccb4a380a78773bfa.jpg" alt="Mapa de civilizaciones antiguas">
+        <div id="pins-container"></div>
+    </div>
+
+    <div id="info-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2 id="modal-title" class="text-2xl font-bold mb-4" style="color: #000000; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;"></h2>
+            <div id="modal-content" class="mb-4 text-gray-700" style="color: #000000; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;"></div>
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        const civilizacionesData = [
+            {
+                nombre: "Mesopotamia",
+                coords: { x: 54, y: 54 },
+                pinClass: 'pin-mesopotamia',
+                info: "<strong>Arquitectura:</strong> Zigurats, templos, palacios, ladrillos de arcilla.<br><strong>Cultura / Sociedad:</strong> Ciudades-estado, escritura cuneiforme, comercio.<br><strong>Datos interesantes:</strong> Primeras leyes escritas (Código de Hammurabi)."
+            },
+            {
+                nombre: "Antiguo Egipto",
+                coords: { x: 54.4, y: 58.5},
+                pinClass: 'pin-egipto',
+                info: "<strong>Arquitectura:</strong> Pirámides, templos de piedra, obeliscos.<br><strong>Cultura / Sociedad:</strong> Faraón divinizado, jeroglíficos, papiros.<br><strong>Datos interesantes:</strong> Pirámides como símbolo de organización estatal."
+            },
+            {
+                nombre: "Valle del Indo",
+                coords: { x: 68, y: 65 },
+                pinClass: 'pin-indo',
+                info: "<strong>Arquitectura:</strong> Ciudades planificadas en cuadrícula, drenaje avanzado.<br><strong>Cultura / Sociedad:</strong> Sociedad urbana, comercio, sellos decorativos.<br><strong>Datos interesantes:</strong> Escritura aún no descifrada, urbanismo muy adelantado."
+            },
+            {
+                nombre: "China antigua",
+                coords: { x: 78, y: 60 },
+                pinClass: 'pin-china',
+                info: "<strong>Arquitectura:</strong> Palacios, templos, murallas, techos curvados.<br><strong>Cultura / Sociedad:</strong> Confucianismo, taoísmo, culto a ancestros.<br><strong>Datos interesantes:</strong> Influencia duradera en filosofía, burocracia, inventos."
+            },
+            {
+                nombre: "Imperio Persa",
+                coords: { x: 59, y: 53 },
+                pinClass: 'pin-persa',
+                info: "<strong>Arquitectura:</strong> Palacios de Persepolis, columnas, relieves.<br><strong>Cultura / Sociedad:</strong> Satrapías, caminos, tolerancia religiosa.<br><strong>Datos interesantes:</strong> Puente cultural entre Oriente y Occidente."
+            },
+            {
+                nombre: "Mesoamérica (Maya, Azteca, etc.)",
+                coords: { x: 19 , y: 63 },
+                pinClass: 'pin-mesoamerica',
+                info: "<strong>Arquitectura:</strong> Pirámides escalonadas, templos, observatorios.<br><strong>Cultura / Sociedad:</strong> Calendarios precisos, jeroglíficos mayas, agricultura.<br><strong>Datos interesantes:</strong> Calendario maya muy preciso."
+            },
+            {
+                nombre: "Mundo Islámico (Edad Media)",
+                coords: { x: 46, y: 60 },
+                pinClass: 'pin-islamico',
+                info: "<strong>Arquitectura:</strong> Mezquitas, cúpulas, minaretes, mosaicos.<br><strong>Cultura / Sociedad:</strong> Bagdad, Córdoba: centros de saber, convivencia cultural.<br><strong>Datos interesantes:</strong> Puente de conocimiento entre antigüedad y Renacimiento."
+            },
+            {
+                nombre: "Europa Medieval",
+                coords: { x: 50, y: 44 },
+                pinClass: 'pin-europa',
+                info: "<strong>Arquitectura:</strong> Catedrales góticas, castillos, monasterios.<br><strong>Cultura / Sociedad:</strong> Feudalismo, gremios, universidades.<br><strong>Datos interesantes:</strong> Cruzadas, universidades, arquitectura gótica."
+            }
+        ];
+
+        const pinsContainer = document.getElementById('pins-container');
+        const infoModal = document.getElementById('info-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalContent = document.getElementById('modal-content');
+        const closeBtn = document.querySelector('.close-btn');
+
+        function createPins() {
+            civilizacionesData.forEach(civ => {
+                const pin = document.createElement('div');
+                pin.className = `map-pin ${civ.pinClass}`;
+                pin.style.left = `${civ.coords.x}%`;
+                pin.style.top = `${civ.coords.y}%`;
+                pin.dataset.civilizacion = civ.nombre;
+
+                pin.addEventListener('click', () => {
+                    modalTitle.textContent = civ.nombre;
+                    modalContent.innerHTML = civ.info;
+                    infoModal.style.display = 'flex';
+                });
+
+                pinsContainer.appendChild(pin);
+            });
+        }
+
+        closeBtn.addEventListener('click', () => {
+            infoModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (event) => {
+            if (event.target === infoModal) {
+                infoModal.style.display = 'none';
+            }
+        });
+        
+        createPins();
+    });
+</script>
+
+</body>
+</html>
